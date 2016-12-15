@@ -1,7 +1,34 @@
 <!DOCTYPE html><html><head>
-  <meta charset="UTF-8">
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width">
   <title>Tetris</title>
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@ytiurin">
+  <meta name="twitter:creator" content="@ytiurin">
+  <meta name="twitter:title" content="Play TETRIS">
+  <meta name="twitter:description" content="Old school TETRIS game running in text mode.">
+  <meta name="twitter:image" content="https://cdn.rawgit.com/ytiurin/tetris/master/demo.gif">
+
+  <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="TETRIS">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+
+  <link rel="mask-icon" href="https://assets-cdn.github.com/pinned-octocat.svg" color="#000000">
+  <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
+
+  <meta name="description" content="Old school TETRIS game running in text mode.">
+
+  <link rel="canonical" href="https://ytiurin.github.com/tetris" data-pjax-transient>
 
   <style type="text/css">
     ::-webkit-scrollbar {
@@ -40,106 +67,55 @@
       background-color: #C2FFAE;
       color: #000000;
     }
+    #buttons {
+      position: absolute;
+      left: 50%;
+      bottom: 10%;
+      transform: translateX(-50%);
+    }
   </style>
 
   <script type="text/javascript" src="tetris.js"></script>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <script>window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+
+    return t;
+  }(document, "script", "twitter-wjs"));</script>
 
 </head><body>
 
   <div id="container"></div>
   <div id="score"></div>
 
-  <script type="text/javascript">+function() {
+  <script type="text/javascript" src="index.js"></script>
 
-    var
-    controlIID,
-    prevKeyCode
+  <div id="buttons">
+    <a class="twitter-share-button"
+      href="https://twitter.com/share"
+      data-text="Old school #TETRIS game running in text mode #javascript #games #retro"
+      data-url="https://ytiurin.github.com/tetris"
+      data-related="ytiurin">
+    Tweet
+    </a>
 
-    function termKey()
-    {
-      clearInterval( controlIID )
-      controlIID = 0
-    }
-
-    function readKey( e )
-    {
-      keyCode = e.which > 0 ? e.which : e.keyCode
-
-      if ( controlIID && keyCode === prevKeyCode )
-        return
-
-      prevKeyCode = keyCode
-
-      var pressKey = function() {
-        TETRIS.pressKey( keyCode )
-      }
-
-      pressKey()
-      termKey()
-
-      var keySpeed = { 37: 100, 39: 100, 40: 50 }
-      controlIID = setInterval( pressKey, keySpeed[ keyCode ] || 200 )
-    }
-
-    document.addEventListener( "click", function() {
-      document.getElementById("score").style.display = "none"
-      addEventListener( 'keydown', readKey )
-    })
-
-    addEventListener( 'keyup', termKey )
-    addEventListener( 'keydown', readKey )
-
-    TETRIS.on({
-      finish: function( score ) {
-        try {
-          var time = (new Date).getTime()
-          var userScore = JSON.parse( localStorage.getItem('tetrisScore')) || []
-          userScore.push({ t: time, s: score })
-
-          localStorage.setItem('tetrisScore', JSON.stringify( userScore ))
-          userScore = userScore.sort( function( a, b ) { return b.s - a.s } )
-            .map( function( o ) {
-              if (!o.s)
-                return
-
-              var scr = o.s.toString().split("").reverse().join("")
-                .match(/.{1,3}/g).join(" ").split("").reverse().join("")
-              scr = "&nbsp;".repeat( 18 - scr.length ) + scr
-
-              var id
-              if ( time === o.t && score === o.s )
-                id = "highlighted"
-
-              return "<span" + ( id ? " id=\"" + id + "\"" : "" ) + ">" +
-                (new Date( o.t )).toLocaleDateString() + scr + "</span>"
-            }).join("<br>")
-
-          // console.log(userScore)
-          var el = document.getElementById("score")
-          el.innerHTML = userScore
-          el.style.display = "block"
-
-          if ( el = document.getElementById("highlighted"))
-            el.scrollIntoView();
-
-          removeEventListener( 'keydown', readKey )
-        }
-        catch( e ) {}
-      },
-
-      nextFrame: function( frame ) {
-        // replace HTML special chars
-        frame = frame.replace( /[ <>]|\n\r/g, function( m ) { return {
-          " ": "&nbsp;",
-          "<" : "&lsaquo;",
-          ">" : "&rsaquo;",
-          "\n\r" : "<br>" }[ m ] })
-
-        document.getElementById("container").innerHTML = frame
-      }
-    })
-
-  }()</script>
+    <!-- Place this tag where you want the button to render. -->
+    <a class="github-button" href="https://github.com/ytiurin/tetris" data-icon="octicon-star" data-count-href="/ytiurin/tetris/stargazers" data-count-api="/repos/ytiurin/tetris#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ytiurin/tetris on GitHub">Star</a>
+  </div>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

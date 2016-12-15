@@ -5,11 +5,12 @@ var merge = require('merge-stream');
 var replace = require('gulp-replace');
 
 var DEST = './';
+var CDN = "//cdn.rawgit.com/ytiurin/tetris/master/";
 
 gulp.task('default', function() {
 
   var html = gulp.src('src/index.html')
-    .pipe(replace(/src="/g, "src=\"//cdn.rawgit.com/ytiurin/tetris/master/"))
+    .pipe(replace(/src="/g, "src=\"" + CDN))
     .pipe(minify({
       collapseWhitespace: true,
       minifyCSS: true,
@@ -17,9 +18,13 @@ gulp.task('default', function() {
     }))
     .pipe(gulp.dest(DEST));
 
-  var js = gulp.src('src/tetris.js')
+  var indexjs = gulp.src('src/index.js')
       .pipe(uglify())
       .pipe(gulp.dest(DEST));
 
-    return merge(html, js);
+  var tetrisjs = gulp.src('src/tetris.js')
+      .pipe(uglify())
+      .pipe(gulp.dest(DEST));
+
+    return merge(html, indexjs, tetrisjs);
 });
