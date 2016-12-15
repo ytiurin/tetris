@@ -6,7 +6,7 @@
                   ▊▊     ▊▊▊▊▊    ▊▊    ▊▊  ▊▊  ▊▊  ▊▊▊▊▊
 */
 
-+function( field, shapes, rotates, widths ) {
++function( parseFloat ) { +function( field, shapes, rotates, widths ) {
   var
 
   frame,
@@ -15,7 +15,9 @@
   emptyField = field.slice(),
   drawField,
   toID,
-  userHandlers = {},
+  emptyFunction = function(){},
+  userNextFrame = emptyFunction,
+  userFinish = emptyFunction,
 
   // achievements
   level,
@@ -26,6 +28,21 @@
   finished = 0,
   paused = 0,
   splash = 1
+
+  function fieldIndex( i, x, y )
+  {
+    return 10 * ( y + i / 4 << 0 ) + x + i % 4
+  }
+
+  function repeat( s, n )
+  {
+    return s.repeat( n )
+  }
+
+  function frameSubStr( from, len )
+  {
+    return frame.substr( from, len )
+  }
 
   function pressKey( keyCode )
   {
@@ -117,16 +134,6 @@
       { x: 4, y: 0, c: 0, i: Math.random() * 19 << 0 }, fig1, fig2 )
   }
 
-  function fieldIndex( i, x, y )
-  {
-    return 10 * ( y + i / 4 << 0 ) + x + i % 4
-  }
-
-  function repeat( s, n )
-  {
-    return s.repeat( n )
-  }
-
   function testCollision( figure )
   {
     if ( !shapes[ figure.i ]
@@ -189,7 +196,7 @@
 
     if ( !figure.c ) {
       finished = 1
-      userHandlers && userHandlers.finish( score )
+      userFinish( score )
       return
     }
 
@@ -231,16 +238,15 @@
     // append rows hit
     var rows = rowsHit.toString()
     rows = "ROWS HIT:" + repeat( " ", 15 - rows.length ) + rows
-    frame = rows + frame.substr( 24 )
+    frame = rows + frameSubStr( 24 )
 
     // append score
-    var scr = score.toString().split("").reverse().join("")
-      .match(/.{1,3}/g).join(" ").split("").reverse().join("")
+    var scr = score.toString().reverse().match(/.{1,3}/g).join(" ").reverse()
     scr = "SCORE:" + repeat( " ", 18 - scr.length ) + scr
-    frame = frame.substr( 0, 80 ) + scr + frame.substr( 104 )
+    frame = frameSubStr( 0, 80 ) + scr + frameSubStr( 104 )
 
     // append level
-    frame = frame.substr( 0, 160 ) + "LEVEL:" + repeat( " ", 17 ) + level + frame.substr( 184 )
+    frame = frameSubStr( 0, 160 ) + "LEVEL:" + repeat( " ", 17 ) + level + frameSubStr( 184 )
 
     // append next figure
     shapes[ nextFigure.i ].map( function( v, i ) {
@@ -248,21 +254,21 @@
       i = 80 * ( 10 + i*2 / 8 << 0 ) + 20 + i*2 % 8
 
       if ( v )
-        frame = frame.substr( 0, i ) + block + frame.substr( i + 2 )
+        frame = frameSubStr( 0, i ) + block + frameSubStr( i + 2 )
     })
 
     // append info
-    frame = frame.substr( 0, 138 ) + "UP ARROW: ROTATE" + frame.substr( 154 )
-    frame = frame.substr( 0, 216 ) + "DOWN ARROW: SOFT DROP" + frame.substr( 237 )
-    frame = frame.substr( 0, 298 ) + "SPACEBAR: HARD DROP" + frame.substr( 317 )
-    frame = frame.substr( 0, 380 ) + "ESC, P: PAUSE" + frame.substr( 393 )
+    frame = frameSubStr( 0, 138 ) + "UP ARROW: ROTATE" + frameSubStr( 154 )
+    frame = frameSubStr( 0, 216 ) + "DOWN ARROW: SOFT DROP" + frameSubStr( 237 )
+    frame = frameSubStr( 0, 298 ) + "SPACEBAR: HARD DROP" + frameSubStr( 317 )
+    frame = frameSubStr( 0, 380 ) + "ESC, P: PAUSE" + frameSubStr( 393 )
 
     if ( paused )
-      frame = frame.substr( 0, 757 ) + "PAUSED" + frame.substr( 763 )
+      frame = frameSubStr( 0, 757 ) + "PAUSED" + frameSubStr( 763 )
 
     if ( finished ) {
-      frame = frame.substr( 0, 756 ) + "TRY AGAIN?" + frame.substr( 766 )
-      frame = frame.substr( 0, 836 ) + "   Y/N    " + frame.substr( 846 )
+      frame = frameSubStr( 0, 756 ) + "TRY AGAIN?" + frameSubStr( 766 )
+      frame = frameSubStr( 0, 836 ) + "   Y/N    " + frameSubStr( 846 )
     }
 
     // add new lines
@@ -273,13 +279,14 @@
   function drawUserFrame()
   {
     draw()
-    userHandlers.nextFrame && userHandlers.nextFrame( frame )
+    userNextFrame( frame )
   }
 
-  function on( inUserHandlers )
+  function on( userHandlers )
   {
-    userHandlers = inUserHandlers
-    userHandlers.nextFrame(frame)
+    userFinish = userHandlers.finish || emptyFunction
+    userNextFrame = userHandlers.nextFrame || emptyFunction
+    userNextFrame( frame )
   }
 
   function nextTick()
@@ -325,7 +332,7 @@
   // shapes
   [785,23,547,116,51,114,305,39,562,15,4369,99,306,54,561,802,113,275,71]
     .map(function(v){
-      return (v>>>0).toString(2).split('').reverse().map(parseFloat)
+      return (v>>>0).toString(2).split("").reverse().map(parseFloat)
     }),
 
   // rotates
@@ -334,6 +341,16 @@
   // widths
   [2,3,2,3,2,3,2,3,2,4,1,3,2,3,2,2,3,2,3]
 )
+}( parseFloat )
+
+String.prototype.reverse = function() {
+  var result = "", i = this.length
+
+  while ( i-- )
+    result += this.charAt( i )
+
+  return result
+}
 
 /*
 SHAPES
