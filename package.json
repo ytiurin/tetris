@@ -1,0 +1,22 @@
+{
+  "name": "TETRIS",
+  "version": "1.0.0",
+  "description": "Old school TETRIS running in text mode.",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/ytiurin/tetris.git"
+  },
+  "main": "tetris.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eugene Tiurin",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-uglify": "latest",
+    "gulp-html-minifier": "latest",
+    "gulp-replace": "latest",
+    "merge-stream": "latest"
+  }
+}

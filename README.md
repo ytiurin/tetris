@@ -1,2 +1,1 @@
-# tetris
-Old school tetris running in text mode.
+# [Play TETRIS](//ytiurin.github.io/tetris)
