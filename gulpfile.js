@@ -10,7 +10,7 @@ var CDN = "//cdn.rawgit.com/ytiurin/tetris/master/";
 gulp.task('default', function() {
 
   var html = gulp.src('src/index.html')
-    .pipe(replace(/src="/g, "src=\"" + CDN))
+    .pipe(replace(/src=".\//g, "src=\"" + CDN))
     .pipe(minify({
       collapseWhitespace: true,
       minifyCSS: true,
