@@ -1,8 +1,6 @@
 +function() {
 
   var
-  controlIID,
-  prevKeyCode,
   nl = "&nbsp;"
 
   function scorize( score )
@@ -196,6 +194,7 @@
 
   function bindGameKeys()
   {
+    var controlIID, prevKeyCode
 
     function termKey()
     {
@@ -231,6 +230,7 @@
     })
 
     return function() {
+      clearInterval( controlIID )
       removeEventListener( 'keyup', termKey )
       removeEventListener( 'keydown', readKey )
       TETRIS.pause()

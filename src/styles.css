@@ -4,7 +4,7 @@
 ::-webkit-scrollbar-thumb {
   background-color: #C2FFAE;
 }
-body, input, button {
+body, a, input, button {
   background-color:#000000; color:#C2FFAE; font-family:"Lucida Console", Monaco, monospace; font-size:12px;
 }
 button, input {
@@ -41,7 +41,11 @@ input {
   text-align: center;
   transform: translateX(-50%);
 }
-.link {
-  text-transform: uppercase;
+a, .link {
   cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+a:hover, .link:hover {
+  text-decoration: underline;
 }

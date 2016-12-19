@@ -6,7 +6,7 @@
                   ▊▊     ▊▊▊▊▊    ▊▊    ▊▊  ▊▊  ▊▊  ▊▊▊▊▊
 */
 
-+function( parseFloat ) { +function( field, shapes, rotates, widths ) {
++function( parseFloat, setTimeout ) { +function( field, shapes, rotates, widths ) {
   var
 
   frame,
@@ -205,7 +205,9 @@
 
     if ( !figure.c ) {
       finished = 1
-      userFinish( score, level, rowsHit )
+      setTimeout( function() {
+        userFinish( score, level, rowsHit )
+      })
       return
     }
 
@@ -354,7 +356,7 @@
   // widths
   [2,3,2,3,2,3,2,3,2,4,1,3,2,3,2,2,3,2,3]
 )
-}( parseFloat )
+}( parseFloat, setTimeout )
 
 String.prototype.reverse = function() {
   var result = "", i = this.length
