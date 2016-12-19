@@ -2,78 +2,262 @@
 
   var
   controlIID,
-  prevKeyCode
+  prevKeyCode,
+  nl = "&nbsp;"
 
-  function termKey()
+  function scorize( score )
   {
-    clearInterval( controlIID )
-    controlIID = 0
+    return score.toString().split("").reverse().join("").match(/.{1,3}/g)
+      .join(" ").split("").reverse().join("")
   }
 
-  function readKey( e )
+  function columnize( c1, c2, w )
   {
-    keyCode = e.which > 0 ? e.which : e.keyCode
+    var rp = w - c1.length - c2.length
+    return c1 + nl.repeat( rp > 0 ? rp : 0 ) + c2
+  }
 
-    if ( controlIID && keyCode === prevKeyCode )
-      return
+  function byId( id )
+  {
+    return document.getElementById( id )
+  }
 
-    prevKeyCode = keyCode
-
-    var pressKey = function() {
-      TETRIS.pressKey( keyCode )
+  function mountLoader( el, rp )
+  {
+    function mount()
+    {
+      el.innerHTML = "|/-\\".charAt( m ) + nl.repeat(rp)
+      m = ++m > 3 ? 0 : m
     }
 
-    pressKey()
-    termKey()
+    var elShit = el.innerHTML, m = 0
 
-    var keySpeed = { 37: 100, 39: 100, 40: 50 }
-    controlIID = setInterval( pressKey, keySpeed[ keyCode ] || 200 )
+    rp = ( rp || 0 ) > 0 ? rp - 1 : 0
+
+    var loaderTimeout = setInterval( mount, 50 )
+
+    mount()
+
+    return function() {
+      clearInterval( loaderTimeout )
+      el.innerHTML = elShit
+    }
   }
 
-  document.addEventListener( "click", function() {
-    document.getElementById("score").style.display = "none"
-    addEventListener( 'keydown', readKey )
-  })
+  function onKey( el, next, uKeyCode )
+  {
+    function onKeyDown( e )
+    {
+      if (( e.which || e.keyCode ) === uKeyCode )
+        next()
+    }
 
-  addEventListener( 'keyup', termKey )
-  addEventListener( 'keydown', readKey )
+    el.addEventListener( "keydown", onKeyDown )
 
-  TETRIS.on({
-    finish: function( score ) {
+    return function() {
+      el.removeEventListener( "keydown", onKeyDown )
+    }
+  }
+
+  function onEnter( el, next )
+  {
+    return onKey( el, next, 13 )
+  }
+
+  function onEsc( el, next )
+  {
+    return onKey( el, next, 27 )
+  }
+
+  function popUserBoard( userData, next, cancelNext )
+  {
+    function hide()
+    {
+      byId("userboard-send").removeEventListener("click", sendScore)
+      byId("userboard").style.display = "none";
+      unsubEnter()
+      unsubEsc()
+    }
+
+    function sendScore()
+    {
+      var name = byId("name-input").value.toLocaleUpperCase()
+
+      if ( !name || name.length > 10 )
+        return
+
+      // console.log("SEND SCORE")
+      byId("userboard-send").removeEventListener("click", sendScore)
+      unsubEnter()
+
+      userData.name = name
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://tetris-tiurin.rhcloud.com/api/scores", true);
+      //Send the proper header information along with the request
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      //Call a function when the state changes.
+      xhr.onreadystatechange = function() {
+          if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+              // Request finished. Do processing here.
+              umountLoader()
+              hide()
+              next()
+          }
+      }
+      xhr.send( Object.keys( userData ).map( function( key ) { return key + "=" + userData[ key ] } ).join( "&" ) );
+
+      var umountLoader = mountLoader( byId("userboard-send") )
+
       try {
-        var time = (new Date).getTime()
-        var userScore = JSON.parse( localStorage.getItem('tetrisScore')) || []
-        userScore.push({ t: time, s: score })
-
-        localStorage.setItem('tetrisScore', JSON.stringify( userScore ))
-        userScore = userScore.sort( function( a, b ) { return b.s - a.s } )
-          .map( function( o ) {
-            if (!o.s)
-              return
-
-            var scr = o.s.toString().split("").reverse().join("")
-              .match(/.{1,3}/g).join(" ").split("").reverse().join("")
-            scr = "&nbsp;".repeat( 18 - scr.length ) + scr
-
-            var id
-            if ( time === o.t && score === o.s )
-              id = "highlighted"
-
-            return "<span" + ( id ? " id=\"" + id + "\"" : "" ) + ">" +
-              (new Date( o.t )).toLocaleDateString() + scr + "</span>"
-          }).join("<br>")
-
-        // console.log(userScore)
-        var el = document.getElementById("score")
-        el.innerHTML = userScore
-        el.style.display = "block"
-
-        if ( el = document.getElementById("highlighted"))
-          el.scrollIntoView();
-
-        removeEventListener( 'keydown', readKey )
+        localStorage.setItem('tetrisName', name )
       }
       catch( e ) {}
+    }
+
+    byId("userboard").style.display = "block";
+    byId("your-score").innerHTML =
+      columnize( "YOUR SCORE:", scorize( userData.score ), 32 )
+
+    try {
+      var time = (new Date).getTime()
+      var userScore = JSON.parse( localStorage.getItem('tetrisScore')) || []
+      userScore.push({ t: time, s: userData.score })
+
+      localStorage.setItem('tetrisScore', JSON.stringify( userScore ))
+      var bestScore = userScore.sort( function( a, b ) { return b.s - a.s } )[0]["s"]
+
+      byId("your-best-score").innerHTML =
+        columnize( "YOUR BEST SCORE:", scorize( bestScore ), 32 )
+    }
+    catch( e ) {}
+
+    try {
+      byId("name-input").value = localStorage.getItem('tetrisName')
+    }
+    catch( e ) {}
+
+    byId("name-input").focus()
+    byId("userboard-send").addEventListener( "click", sendScore )
+    var unsubEnter = onEnter( byId("name-input"), sendScore )
+
+    var unsubEsc = onEsc( document, function() {
+      hide()
+      cancelNext()
+    })
+  }
+
+  function popLeaderboard( next )
+  {
+    function hide()
+    {
+      elBoard.style.display = "none";
+      elClose.removeEventListener( "click", hide )
+      unsubEsc()
+      next()
+    }
+
+    var elBoard = byId("leaderboard")
+    if ( elBoard.style.display === "block" )
+      return
+
+    elBoard.style.display = "block"
+    var umountLoader = mountLoader( byId("score-leaders"), 32 )
+
+    var elClose = byId("leaderboard-close")
+    elClose.addEventListener( "click", hide )
+    elClose.focus()
+
+    var unsubEsc = onEsc( document, hide )
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "https://tetris-tiurin.rhcloud.com/api/scores", true);
+
+    xhr.onload = function (e) {
+      var resp = JSON.parse(e.target.response)
+
+      if ( resp.status === "ok" ) {
+        umountLoader()
+
+        byId("score-leaders").innerHTML = resp.scores
+          .map(function( o ) {
+            o.time = (new Date( o.time )).getTime()
+            return o })
+          .sort( function( a, b ) {
+            return b.score != a.score ? b.score - a.score : a.time - b.time  } )
+          .map( function( o ) {
+            return columnize( o.name, scorize( o.score ), 32 )
+          }).join("<br>")
+      }
+    };
+
+    xhr.send();
+  }
+
+  function bindGameKeys()
+  {
+
+    function termKey()
+    {
+      clearInterval( controlIID )
+      controlIID = 0
+    }
+
+    function readKey( e )
+    {
+      keyCode = e.which > 0 ? e.which : e.keyCode
+
+      if ( controlIID && keyCode === prevKeyCode )
+        return
+
+      prevKeyCode = keyCode
+
+      var pressKey = function() {
+        TETRIS.pressKey( keyCode )
+      }
+
+      pressKey()
+      termKey()
+
+      var keySpeed = { 37: 100, 39: 100, 40: 50 }
+      controlIID = setInterval( pressKey, keySpeed[ keyCode ] || 200 )
+    }
+
+    TETRIS.upause()
+
+    setTimeout(function(){
+      addEventListener( 'keyup', termKey )
+      addEventListener( 'keydown', readKey )
+    })
+
+    return function() {
+      removeEventListener( 'keyup', termKey )
+      removeEventListener( 'keydown', readKey )
+      TETRIS.pause()
+    }
+  }
+
+  var ubindGameKeys = bindGameKeys()
+
+  TETRIS.on({
+    finish: function( score, level, rowsHit ) {
+      ubindGameKeys()
+
+      popUserBoard({
+          score: score,
+          level: level,
+          rowsHit: rowsHit
+        },
+        function() {
+          popLeaderboard( function() {
+            TETRIS.start()
+            ubindGameKeys = bindGameKeys()
+          })
+        },
+        function() {
+          TETRIS.start()
+          ubindGameKeys = bindGameKeys()
+        })
     },
 
     nextFrame: function( frame ) {
@@ -84,7 +268,15 @@
         ">" : "&rsaquo;",
         "\n\r" : "<br>" }[ m ] })
 
-      document.getElementById("container").innerHTML = frame
+      byId("container").innerHTML = frame
     }
+  })
+
+  byId("leaderboard-link").addEventListener( "click", function() {
+    ubindGameKeys()
+
+    popLeaderboard( function() {
+      ubindGameKeys = bindGameKeys()
+    })
   })
 }()

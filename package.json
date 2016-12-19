@@ -1,7 +1,7 @@
 {
   "name": "TETRIS",
   "version": "1.0.0",
-  "description": "Old school TETRIS running in text mode.",
+  "description": "Classic TETRIS game running in text mode.",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/ytiurin/tetris.git"
@@ -15,6 +15,7 @@
   "devDependencies": {
     "gulp": "latest",
     "gulp-uglify": "latest",
+    "gulp-clean-css": "latest",
     "gulp-html-minifier": "latest",
     "gulp-replace": "latest",
     "merge-stream": "latest"

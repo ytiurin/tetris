@@ -44,6 +44,20 @@
     return frame.substr( from, len )
   }
 
+  function pause()
+  {
+    paused = 1
+    clearTimeout( toID )
+    drawUserFrame()
+  }
+
+  function upause()
+  {
+    paused = 0
+    drawUserFrame()
+    nextTick()
+  }
+
   function pressKey( keyCode )
   {
     if ( splash ) {
@@ -73,18 +87,13 @@
       return
 
     if ( paused ) {
-      paused = 0
-      drawUserFrame()
-      nextTick()
+      upause()
       return
     }
 
     // ESC, P
-    if ( keyCode in {27:1,80:1} ) {
-      paused = 1
-      clearTimeout( toID )
-      drawUserFrame()
-    }
+    if ( keyCode in {27:1,80:1} )
+      pause()
 
     if ( keyCode in {37:1,38:1,39:1} ) {
       var tryFigure = newFigure( figure )
@@ -196,7 +205,7 @@
 
     if ( !figure.c ) {
       finished = 1
-      userFinish( score )
+      userFinish( score, level, rowsHit )
       return
     }
 
@@ -312,6 +321,7 @@
     level = 1
     score = 0
     rowsHit = 0
+    finished = 0
 
     updateDrawField()
     drawUserFrame()
@@ -322,8 +332,11 @@
 
   // INTERFACE
   window.TETRIS = {
+    on: on,
+    pause: pause,
     pressKey: pressKey,
-    on: on
+    start: start,
+    upause: upause,
   }
 }(
   // field
