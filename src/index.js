@@ -178,11 +178,6 @@
         umountLoader()
 
         byId("score-leaders").innerHTML = resp.scores
-          .map(function( o ) {
-            o.time = (new Date( o.time )).getTime()
-            return o })
-          .sort( function( a, b ) {
-            return b.score != a.score ? b.score - a.score : a.time - b.time  } )
           .map( function( o ) {
             return columnize( o.name, scorize( o.score ), 32 )
           }).join("<br>")
