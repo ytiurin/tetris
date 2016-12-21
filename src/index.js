@@ -199,6 +199,9 @@
 
     function readKey( e )
     {
+      if ( e.altKey || e.ctrlKey || e.metaKey || e.shiftKey )
+        return
+        
       keyCode = e.which > 0 ? e.which : e.keyCode
 
       if ( controlIID && keyCode === prevKeyCode )

@@ -6,7 +6,8 @@
                   ▊▊     ▊▊▊▊▊    ▊▊    ▊▊  ▊▊  ▊▊  ▊▊▊▊▊
 */
 
-+function( parseFloat, setTimeout ) { +function( field, shapes, rotates, widths ) {
++function( parseFloat, setTimeout, Math ) {
++function( field, shapes, rotates, widths, shifts0, shifts ) {
   var
 
   frame,
@@ -112,8 +113,21 @@
 
         // UP
         case 38:
-          tryFigure = newFigure( figure, { i: rotates[ figure.i ] } )
+          var figureInd = rotates[ figure.i ], shiftX = 0, shiftY = 0
+
+          if ( shifts[ figureInd ] ) {
+            shiftX = shifts[ figureInd ][0]
+            shiftY = shifts[ figureInd ][1]
+          }
+
+          tryFigure = newFigure( figure, {
+            x: figure.x + shiftX,
+            y: figure.y + shiftY,
+            i: figureInd
+          })
+
           tryFigure.x = Math.min( tryFigure.x, 10 - widths[ tryFigure.i ] )
+          tryFigure.x = Math.max( tryFigure.x, 0 )
       }
 
       figure = testCollision( tryFigure ) || figure
@@ -139,8 +153,15 @@
 
   function newFigure( fig1, fig2 )
   {
-    return Object.assign(
-      { x: 4, y: 0, c: 0, i: Math.random() * 19 << 0 }, fig1, fig2 )
+    var figureInd = Math.random() * 19 << 0
+
+    return Object.assign({
+        x: 4 + ( shifts0[ figureInd ] ? shifts0[ figureInd ] : 0 ),
+        y: 0,
+        c: 0,
+        i: figureInd
+      },
+        fig1, fig2 )
   }
 
   function testCollision( figure )
@@ -354,9 +375,15 @@
   [1,2,3,0,4,6,7,8,5,10,9,12,11,14,13,16,17,18,15],
 
   // widths
-  [2,3,2,3,2,3,2,3,2,4,1,3,2,3,2,2,3,2,3]
+  [2,3,2,3,2,3,2,3,2,4,1,3,2,3,2,2,3,2,3],
+
+  // shifts 0
+  { 9: -1, 10: 1 },
+
+  // rotate shifts
+  { "5": [0,0], "6": [1,0], "7": [-1,1], "8": [0,0], "9": [-2,2], "10": [2,-1], "11": [-1,1], "12": [1,0], "13": [-1,1], "14": [1,0] }
 )
-}( parseFloat, setTimeout )
+}( parseFloat, setTimeout, Math )
 
 String.prototype.reverse = function() {
   var result = "", i = this.length
