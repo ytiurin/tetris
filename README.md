@@ -1,6 +1,6 @@
 ![Demo GIF](https://cdn.rawgit.com/ytiurin/tetris/master/public/demo.gif)
 
-# [Play :video_game: TETRIS](//ytiurin.github.io/tetris)
+# [Play :video_game: TETRIS](//ytiurin.github.io/tetris/)
 
 I made this small project to simulate the original 1984 version of TETRIS game. I saw a [Youtube video](https://www.youtube.com/watch?v=O0gAgQQHFcQ) showing the gameplay of this classic run on [DVK-2](https://en.wikipedia.org/wiki/DVK) computer and thought I could implement it in browser and get some fun in the process.
 
@@ -58,4 +58,6 @@ addEventListener( "keydown", function( e ) {
 
 Check the [index.js](https://github.com/ytiurin/tetris/blob/master/src/index.js) for more advanced code.
 
-Don't forget to [play it](//ytiurin.github.io/tetris).
+## Leaderboard
+
+I also made a small microservice to store best scores coming from the [play page](//ytiurin.github.io/tetris/). You can see a list of monthly leaders after every play round.
