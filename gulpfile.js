@@ -6,7 +6,7 @@ var merge = require('merge-stream');
 var replace = require('gulp-replace');
 
 var DEST = './public';
-var CDN = "//cdn.rawgit.com/ytiurin/tetris/master/public/";
+var CDN = "//ytiurin.github.io/tetris/public/";
 
 gulp.task('default', function() {
 
