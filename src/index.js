@@ -194,8 +194,10 @@
 
   function clickScreenButton( e )
   {
-    if ( e.target.dataset && e.target.dataset.key )
+    if ( e.target.dataset && e.target.dataset.key ) {
       TETRIS.pressKey( parseInt( e.target.dataset.key ))
+      e.target.blur()
+    }
   }
 
   function bindGameKeys()
