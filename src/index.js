@@ -72,9 +72,16 @@
     function hide()
     {
       byId("userboard-send").removeEventListener("click", sendScore)
+      byId("userboard-close").removeEventListener( "click", cancel )
       byId("userboard").style.display = "none";
       unsubEnter()
       unsubEsc()
+    }
+
+    function cancel()
+    {
+      hide()
+      cancelNext()
     }
 
     function sendScore()
@@ -137,12 +144,10 @@
 
     byId("name-input").focus()
     byId("userboard-send").addEventListener( "click", sendScore )
-    var unsubEnter = onEnter( byId("name-input"), sendScore )
+    byId("userboard-close").addEventListener( "click", cancel )
 
-    var unsubEsc = onEsc( document, function() {
-      hide()
-      cancelNext()
-    })
+    var unsubEnter = onEnter( byId("name-input"), sendScore )
+    var unsubEsc = onEsc( document, cancel )
   }
 
   function popLeaderboard( next )
@@ -187,6 +192,12 @@
     xhr.send();
   }
 
+  function clickScreenButton( e )
+  {
+    if ( e.target.dataset && e.target.dataset.key )
+      TETRIS.pressKey( parseInt( e.target.dataset.key ))
+  }
+
   function bindGameKeys()
   {
     var controlIID, prevKeyCode
@@ -201,7 +212,7 @@
     {
       if ( e.altKey || e.ctrlKey || e.metaKey || e.shiftKey )
         return
-        
+
       keyCode = e.which > 0 ? e.which : e.keyCode
 
       if ( controlIID && keyCode === prevKeyCode )
@@ -225,12 +236,14 @@
     setTimeout(function(){
       addEventListener( 'keyup', termKey )
       addEventListener( 'keydown', readKey )
+      addEventListener( 'click', clickScreenButton )
     })
 
     return function() {
       clearInterval( controlIID )
       removeEventListener( 'keyup', termKey )
       removeEventListener( 'keydown', readKey )
+      removeEventListener( 'click', clickScreenButton )
       TETRIS.pause()
     }
   }
@@ -266,7 +279,7 @@
         ">" : "&rsaquo;",
         "\n\r" : "<br>" }[ m ] })
 
-      byId("container").innerHTML = frame
+      byId("game").innerHTML = frame
     }
   })
 

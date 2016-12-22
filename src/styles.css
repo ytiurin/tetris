@@ -4,8 +4,22 @@
 ::-webkit-scrollbar-thumb {
   background-color: #C2FFAE;
 }
+body {
+  margin: 0;
+}
 body, a, input, button {
-  background-color:#000000; color:#C2FFAE; font-family:"Lucida Console", Monaco, monospace; font-size:12px;
+  background-color:#000000;
+  color:#C2FFAE;
+  font-family:"Lucida Console", Monaco, monospace;
+  font-size:12px;
+}
+a, .link {
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+a:hover, .link:hover {
+  text-decoration: underline;
 }
 button, input {
   border: none;
@@ -16,16 +30,32 @@ input {
   border-bottom: 1px solid #C2FFAE;
   width:80px;
 }
-#container, #leaderboard, #userboard {
+#container {
+  height:100%;
+  width:100%;
+  position: fixed;
+}
+#game, #leaderboard, #userboard {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
+@media (max-height: 568px) {
+  #game {
+    top: 20%;
+    transform: translateX(-50%) translateY(-20%);
+  }
+}
 #leaderboard, #userboard {
   background-color: #000000;
   border: 1px solid #C2FFAE;
   display: none;
+  padding: 40px 30px 20px;
+  white-space: nowrap;
+  z-index: 1;
+}
+#leaderboard {
   padding: 40px 10px 20px 30px;
 }
 #score-leaders {
@@ -34,18 +64,43 @@ input {
   margin-bottom: 10px;
   padding-right: 20px;
 }
-#buttons {
+@media (max-height: 400px) {
+  #score-leaders {
+    height: 120px;
+  }
+}
+#share {
   position: absolute;
   left: 50%;
   bottom: 10%;
   text-align: center;
   transform: translateX(-50%);
+  white-space: nowrap;
 }
-a, .link {
-  cursor: pointer;
-  text-transform: uppercase;
-  text-decoration: none;
+@media (max-height: 419px) {
+  #share {
+    display:none;
+  }
 }
-a:hover, .link:hover {
-  text-decoration: underline;
+.controls {
+  bottom: 80px;
+  position: fixed;
+  z-index: 1;
+}
+@media (max-height: 419px) {
+  .controls {
+    bottom: 0;
+  }
+}
+.controls.left {
+  left:0;
+}
+.controls.right {
+  right:0;
+}
+.controls > button {
+  background-color: transparent;
+  width:80px;
+  height:80px;
+  display:block;
 }
