@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/ubuntumono/v6/ViZhet7Ak-LRXZMXzuAfkSYE0-AqJ3nfInTTiDXDjU4.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -12,7 +20,7 @@ body, a, input, button {
   color:#C2FFAE;
   font-family: 'Ubuntu Mono', monospace;
   font-size:12px;
-  line-height: 1;
+  line-height: 1.2;
 }
 a, .link {
   cursor: pointer;
