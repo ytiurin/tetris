@@ -6,7 +6,7 @@
                   ▊▊     ▊▊▊▊▊    ▊▊    ▊▊  ▊▊  ▊▊  ▊▊▊▊▊
 */
 
-+function( parseFloat, setTimeout, Math ) {
++function( parseFloat, setTimeout, clearTimeout, Math ) {
 +function( field, shapes, rotates, widths, shifts0, shifts ) {
   var
 
@@ -49,13 +49,13 @@
   {
     paused = 1
     clearTimeout( toID )
-    drawUserFrame()
+    drawFrame()
   }
 
   function upause()
   {
     paused = 0
-    drawUserFrame()
+    drawFrame()
     nextTick()
   }
 
@@ -80,7 +80,7 @@
         // N
         case 78:
           splash = 1
-          drawUserFrame()
+          drawFrame()
       }
     }
 
@@ -132,7 +132,7 @@
 
       figure = testCollision( tryFigure ) || figure
       updateDrawField()
-      drawUserFrame()
+      drawFrame()
     }
 
     if ( keyCode in {40:1,32:1} ) {
@@ -146,7 +146,7 @@
         case 32:
           while (dropFigure());
       }
-      drawUserFrame()
+      drawFrame()
       nextTick()
     }
   }
@@ -175,31 +175,6 @@
       }))
 
       return figure
-  }
-
-  function cleanFullRows()
-  {
-    var i = 200, l = 10, k = 0, j = 0
-
-    while ( i -= l )
-      if ( field.slice( i, i + l ).every( parseFloat )) {
-        field.splice( i, l )
-        j += l
-        k < 4 && k++
-
-        // up level every 10 rows hit
-        if (( ++rowsHit % 10 ) === 0 )
-          level = level < 9 ? level + 1 : 1
-      }
-
-    while ( j-- )
-      field.unshift(0)
-
-    score += [0, 50,150,350,1000][k] * level
-
-    // field is cleared
-    if ( !field.some( parseFloat ))
-      score += 2000 * level
   }
 
   function updateDrawField()
@@ -236,12 +211,35 @@
     figure = nextFigure
     nextFigure = newFigure()
     field = drawField
-    cleanFullRows()
+
+    // CLEAN FULL ROWS
+    var i = 200, l = 10, k = 0, j = 0
+
+    while ( i -= l )
+      if ( field.slice( i, i + l ).every( parseFloat )) {
+        field.splice( i, l )
+        j += l
+        k < 4 && k++
+
+        // up level every 10 rows hit
+        if (( ++rowsHit % 10 ) === 0 )
+          level = level < 9 ? level + 1 : 1
+      }
+
+    while ( j-- )
+      field.unshift(0)
+
+    score += [0, 50,150,350,1000][k] * level
+
+    // field is cleared
+    if ( !field.some( parseFloat ))
+      score += 2000 * level
+
     drawField = field
     updateDrawField()
   }
 
-  function draw()
+  function drawFrame()
   {
     var nl = "\n\r", spp = repeat( " ", 28 ), ls = spp + "<!", rs = "!>" + spp,
       j = rs + ls, bl = String.fromCharCode(9646), block = repeat( bl, 2 ),
@@ -306,11 +304,7 @@
     // add new lines
     frame = frame.match(/.{1,80}/g).join( nl )
     frame = el + frame + nl + repeat( el, 2 )
-  }
 
-  function drawUserFrame()
-  {
-    draw()
     userNextFrame( frame )
   }
 
@@ -330,7 +324,7 @@
 
     toID = setTimeout( function() {
       dropFigure()
-      drawUserFrame()
+      drawFrame()
       nextTick()
     },
       ( 10 - level ) * 100 )
@@ -347,7 +341,7 @@
     finished = 0
 
     updateDrawField()
-    drawUserFrame()
+    drawFrame()
     nextTick()
   }
 
@@ -383,7 +377,7 @@
   // rotate shifts
   { "5": [0,0], "6": [1,0], "7": [-1,1], "8": [0,0], "9": [-2,2], "10": [2,-1], "11": [-1,1], "12": [1,0], "13": [-1,1], "14": [1,0] }
 )
-}( parseFloat, setTimeout, Math )
+}( parseFloat, setTimeout, clearTimeout, Math )
 
 String.prototype.reverse = function() {
   var result = "", i = this.length
