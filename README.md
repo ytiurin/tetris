@@ -60,4 +60,4 @@ Check the [index.js](https://github.com/ytiurin/tetris/blob/master/src/index.js)
 
 ## Leaderboard
 
-I also made a small microservice to store best scores coming from the [play page](https://ytiurin.github.io/tetris/). You can see a list of monthly leaders after every play round.
+I also made a simple microservice to store best scores coming from the [play page](https://ytiurin.github.io/tetris/). You can see a list of monthly leaders after every play round.
