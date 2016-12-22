@@ -12,7 +12,7 @@ body, a, input, button {
   color:#C2FFAE;
   font-family: 'Ubuntu Mono', monospace;
   font-size:12px;
-  line-height: 1px;
+  line-height: 1;
 }
 a, .link {
   cursor: pointer;
