@@ -10,8 +10,9 @@ body {
 body, a, input, button {
   background-color:#000000;
   color:#C2FFAE;
-  font-family: monospace;
+  font-family: 'Ubuntu Mono', monospace;
   font-size:12px;
+  line-height: 1px;
 }
 a, .link {
   cursor: pointer;
@@ -40,6 +41,7 @@ input {
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
+  white-space: nowrap;
 }
 @media (max-height: 568px) {
   #game {
@@ -52,7 +54,6 @@ input {
   border: 1px solid #C2FFAE;
   display: none;
   padding: 40px 30px 20px;
-  white-space: nowrap;
   z-index: 1;
 }
 #leaderboard {
