@@ -1,9 +1,3 @@
-@font-face {
-  font-family: 'Ubuntu Mono';
-  font-style: normal;
-  font-weight: 400;
-  src: url(https://fonts.gstatic.com/s/ubuntumono/v6/ViZhet7Ak-LRXZMXzuAfkY4P5ICox8Kq3LLUNMylGO4.woff2) format('woff2');
-}
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -16,7 +10,7 @@ body {
 body, a, input, button {
   background-color:#000000;
   color:#C2FFAE;
-  font-family: 'Ubuntu Mono', monospace;
+  font-family: 'Anonymous Pro';
   font-size:12px;
   line-height: 1.2;
 }
