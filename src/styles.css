@@ -103,6 +103,10 @@ input {
 .controls.right {
   right:0;
 }
+.controls.top {
+  right:0;
+  top:0;
+}
 .controls > button {
   background-color: transparent;
   width:80px;
