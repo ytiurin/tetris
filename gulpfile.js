@@ -20,6 +20,7 @@ gulp.task('default', function() {
     .pipe(gulp.dest('./'));
 
   var indexjs = gulp.src('src/index.js')
+    .pipe(replace(/\.\.\/public\//g, CDN ))
     .pipe(uglify())
     .pipe(gulp.dest(DEST));
 
