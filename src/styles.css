@@ -104,8 +104,14 @@ input {
   right:0;
 }
 .controls.top {
+  height:0;
   right:0;
   top:0;
+}
+@media (max-height: 419px) {
+  .controls.top {
+    display:none;
+  }
 }
 .controls > button {
   background-color: transparent;
