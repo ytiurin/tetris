@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'DejaVuSansMono';
+  src: url(./DejaVuSansMono.ttf) format('truetype');
+}
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -10,7 +14,7 @@ body {
 body, a, input, button {
   background-color:#000000;
   color:#C2FFAE;
-  font-family: 'Anonymous Pro';
+  font-family: 'DejaVuSansMono', monospace;
   font-size:12px;
   line-height: 1.2;
 }

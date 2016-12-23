@@ -29,6 +29,7 @@ gulp.task('default', function() {
 
 
   var css = gulp.src('src/styles.css')
+    .pipe(replace(/url\(.\//g, "url(" + CDN ))
     .pipe(cleanCSS())
     .pipe(gulp.dest(DEST));
 
