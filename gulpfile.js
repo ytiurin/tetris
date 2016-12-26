@@ -4,23 +4,28 @@ var cleanCSS = require('gulp-clean-css');
 var minify = require('gulp-html-minifier');
 var merge = require('merge-stream');
 var replace = require('gulp-replace');
+var rename = require("gulp-rename");
+var jsonminify = require('gulp-jsonminify');
 
 var DEST = './public';
-var CDN = "//ytiurin.github.io/tetris/public/";
 
 gulp.task('default', function() {
 
-  var html = gulp.src('src/index.html')
-    .pipe(replace(/(src|href)=".\//g, "$1=\"" + CDN ))
+  var html = gulp.src('./dev.html')
+    .pipe(replace(/\/src/g, "/public" ))
     .pipe(minify({
       collapseWhitespace: true,
       minifyCSS: true,
       minifyJS: true
     }))
+    .pipe(rename("index.html"))
     .pipe(gulp.dest('./'));
 
-  var indexjs = gulp.src('src/index.js')
-    .pipe(replace(/\.\.\/public\//g, CDN ))
+  var css = gulp.src('src/styles.css')
+    .pipe(cleanCSS())
+    .pipe(gulp.dest(DEST));
+
+  var playjs = gulp.src('src/play.js')
     .pipe(uglify())
     .pipe(gulp.dest(DEST));
 
@@ -28,11 +33,13 @@ gulp.task('default', function() {
     .pipe(uglify())
     .pipe(gulp.dest(DEST));
 
+  var sw = gulp.src('src/sw.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('./'));
 
-  var css = gulp.src('src/styles.css')
-    .pipe(replace(/url\(.\//g, "url(" + CDN ))
-    .pipe(cleanCSS())
+  var poly = gulp.src('src/serviceworker-cache-polyfill.js')
+    .pipe(uglify())
     .pipe(gulp.dest(DEST));
 
-  return merge(html, indexjs, tetrisjs, css);
+  return merge(html, css, playjs, tetrisjs, sw, poly);
 });

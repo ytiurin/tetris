@@ -1,0 +1,27 @@
+{
+  "short_name": "TETRIS",
+  "name": "The original TETRIS game simulation",
+  "description": "A small simulator of the original 1984 version of TETRIS game.",
+  "icons": [
+    {
+      "src": "https://github.com/apple-touch-icon-76x76.png",
+      "sizes": "76x76",
+      "type": "image/png"
+    },
+    {
+      "src": "https://github.com/apple-touch-icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "https://github.com/apple-touch-icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "black",
+  "theme_color": "#C2FFAE"
+}

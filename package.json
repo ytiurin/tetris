@@ -1,13 +1,14 @@
 {
   "name": "TETRIS",
   "version": "1.0.0",
-  "description": "Classic TETRIS game running in text mode.",
+  "description": "The original TETRIS game simulation.",
+  "private": true,
   "repository": {
     "type" : "git",
     "url" : "https://github.com/ytiurin/tetris.git"
   },
-  "main": "tetris.js",
   "scripts": {
+    "start": "http-server ./ -c-1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Eugene Tiurin",
@@ -18,6 +19,9 @@
     "gulp-clean-css": "latest",
     "gulp-html-minifier": "latest",
     "gulp-replace": "latest",
+    "gulp-rename": "latest",
+    "gulp-jsonminify": "latest",
+    "http-server": "latest",
     "merge-stream": "latest"
   }
 }
