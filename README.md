@@ -61,3 +61,7 @@ Check the [index.js](https://github.com/ytiurin/tetris/blob/master/src/index.js)
 ## Leaderboard
 
 I also made a simple microservice to store best scores coming from the [play page](https://ytiurin.github.io/tetris/). You can see a list of monthly leaders after every play round.
+
+## Progressive Web App
+
+The [play page](https://ytiurin.github.io/tetris/) is served as a [PWA](https://developers.google.com/web/progressive-web-apps/), so you can play the game offline.
