@@ -12,7 +12,7 @@ var DEST = './public';
 gulp.task('default', function() {
 
   var html = gulp.src('./dev.html')
-    .pipe(replace(/\/src/g, "/public" ))
+    .pipe(replace(/\.\/src/g, "./public" ))
     .pipe(minify({
       collapseWhitespace: true,
       minifyCSS: true,

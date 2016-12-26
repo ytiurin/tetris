@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'DejaVuSansMono';
-  src: url("/public/DejaVuSansMono.ttf") format('truetype');
+  src: url("./DejaVuSansMono.ttf") format('truetype');
 }
 ::-webkit-scrollbar {
   width: 4px;

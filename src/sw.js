@@ -1,6 +1,6 @@
 // Chrome's currently missing some useful cache methods,
 // this polyfill adds them.
-importScripts('/public/serviceworker-cache-polyfill.js');
+importScripts('./public/serviceworker-cache-polyfill.js');
 
 // Here comes the install event!
 // This only happens once, when the browser sees this
@@ -17,23 +17,23 @@ self.addEventListener('install', function(event) {
     caches.open('simple-sw-v1').then(function(cache) {
 
       cache.addAll([
-        '/public/ambience.ogg',
-        '/public/beep.ogg',
-        '/public/key1.ogg',
-        '/public/key2.ogg',
-        '/public/key3.ogg',
-        '/public/key4.ogg',
-        '/public/space.ogg',
-        '/public/DejaVuSansMono.ttf'
+        './public/ambience.ogg',
+        './public/beep.ogg',
+        './public/key1.ogg',
+        './public/key2.ogg',
+        './public/key3.ogg',
+        './public/key4.ogg',
+        './public/space.ogg',
+        './public/DejaVuSansMono.ttf'
       ]);
 
       // And add resources to it
       return cache.addAll([
         './',
-        '/manifest.json',
-        '/public/styles.css',
-        '/public/tetris.js',
-        '/public/play.js'
+        './manifest.json',
+        './public/styles.css',
+        './public/tetris.js',
+        './public/play.js'
       ]);
     })
   );

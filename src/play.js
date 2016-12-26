@@ -2,7 +2,7 @@
 
   var nl = "&nbsp;",
 
-  publPath = "/public/"
+  publPath = "./public/"
 
   function scorize( score )
   {
