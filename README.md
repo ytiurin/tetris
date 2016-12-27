@@ -64,4 +64,4 @@ The [play page](https://ytiurin.github.io/tetris/) is served as a [PWA](https://
 
 ## Leaderboard
 
-I also made a simple microservice to store best scores coming from the [play page](https://ytiurin.github.io/tetris/). You can check the list of monthly leaders evry time you've done a round.
+I also made a simple microservice to store best scores coming from the [play page](https://ytiurin.github.io/tetris/). You can check the list of monthly leaders every time finish a round.
