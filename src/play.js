@@ -257,13 +257,14 @@
   var ubindGameKeys = bindGameKeys()
 
   TETRIS.on({
-    finish: function( score, level, rowsHit ) {
+    finish: function( score, level, rowsHit, time ) {
       ubindGameKeys()
 
       popUserBoard({
           score: score,
           level: level,
-          rowsHit: rowsHit
+          rowsHit: rowsHit,
+          time: time
         },
         function() {
           popLeaderboard( function() {

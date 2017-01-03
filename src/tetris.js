@@ -24,6 +24,7 @@
   level,
   score,
   rowsHit,
+  time,
 
   // states
   finished = 0,
@@ -201,8 +202,9 @@
 
     if ( !figure.c ) {
       finished = 1
+      time = (( new Date ) - time ) / 1000 << 0
       setTimeout( function() {
-        userFinish( score, level, rowsHit )
+        userFinish( score, level, rowsHit, time )
       })
       return
     }
@@ -338,6 +340,7 @@
     level = 1
     score = 0
     rowsHit = 0
+    time = new Date
     finished = 0
 
     updateDrawField()
