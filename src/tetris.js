@@ -377,7 +377,7 @@
   // rotate shifts
   { "5": [0,0], "6": [1,0], "7": [-1,1], "8": [0,0], "9": [-2,2], "10": [2,-1], "11": [-1,1], "12": [1,0], "13": [-1,1], "14": [1,0] }
 )
-}( parseFloat, setTimeout, clearTimeout, Math )
+}( parseFloat, setTimeout, clearTimeout, Math );
 
 String.prototype.reverse = function() {
   var result = "", i = this.length
@@ -386,7 +386,7 @@ String.prototype.reverse = function() {
     result += this.charAt( i )
 
   return result
-}
+};
 
 /*
 SHAPES

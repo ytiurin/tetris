@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var cleanCSS = require('gulp-clean-css');
+var concat = require('gulp-concat');
 var minify = require('gulp-html-minifier');
 var merge = require('merge-stream');
 var replace = require('gulp-replace');
@@ -25,11 +26,9 @@ gulp.task('default', function() {
     .pipe(cleanCSS())
     .pipe(gulp.dest(DEST));
 
-  var playjs = gulp.src('src/play.js')
-    .pipe(uglify())
-    .pipe(gulp.dest(DEST));
-
-  var tetrisjs = gulp.src('src/tetris.js')
+  var js = gulp.src(['src/tetris.js', "src/audio.js", "src/play.js", "src/onload.js"])
+    .pipe(replace(/\.\/src/g, "./public" ))
+    .pipe(concat('all.js'))
     .pipe(uglify())
     .pipe(gulp.dest(DEST));
 
@@ -41,5 +40,5 @@ gulp.task('default', function() {
     .pipe(uglify())
     .pipe(gulp.dest(DEST));
 
-  return merge(html, css, playjs, tetrisjs, sw, poly);
+  return merge(html, css, js, sw, poly);
 });

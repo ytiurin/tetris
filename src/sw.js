@@ -32,8 +32,7 @@ self.addEventListener('install', function(event) {
         './',
         './manifest.json',
         './public/styles.css',
-        './public/tetris.js',
-        './public/play.js'
+        './public/all.js'
       ]);
     })
   );

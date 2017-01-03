@@ -15,6 +15,7 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "latest",
+    "gulp-concat": "latest",
     "gulp-uglify": "latest",
     "gulp-clean-css": "latest",
     "gulp-html-minifier": "latest",
