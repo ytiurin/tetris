@@ -56,7 +56,7 @@ addEventListener( "keydown", function( e ) {
 
 ```
 
-Check the [index.js](https://github.com/ytiurin/tetris/blob/master/src/index.js) for more advanced code.
+Check the [tetris.js](https://github.com/ytiurin/tetris/blob/master/src/tetris.js) for more advanced code.
 
 ## Audio
 
