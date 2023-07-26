@@ -31,6 +31,31 @@
   paused = 0,
   splash = 1
 
+
+  // To properly shuffle an array of 5, deciding next pieces
+  // In tetris the next 6 pieces are considered a packet
+  // Every time a packet ends a new one randomly generates
+  // All packets contain one of every type of pieces
+  // This way player knows that the piece he needs will be here in ,in worst case, 11 pieces aheadat most
+  function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+
+
   function fieldIndex( i, x, y )
   {
     return 10 * ( y + i / 4 << 0 ) + x + i % 4
@@ -164,6 +189,24 @@
       },
         fig1, fig2 )
   }
+
+  function newFigurePack()
+  {
+    // 1 = I piece
+    // 2 = Z piece
+    // 3 = S piece
+    // 4 = O piece
+    // 5 is L piece
+    // 6 is J piece
+    var pack = shuffle([1,2,3,4,5,6])
+
+    // Couldn't figure out how you implemented piece system
+    // (I'm new to js :D)
+    // But if you use randomizer the gameplay will be way better
+    // I suffered a lot because of non-proper randomization :D
+    return pack
+  }
+
 
   function testCollision( figure )
   {
